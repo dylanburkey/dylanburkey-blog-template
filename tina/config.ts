@@ -5,7 +5,7 @@ import { defineConfig } from 'tinacms'
 const branch = process.env.HEAD || process.env.VERCEL_GIT_COMMIT_REF || 'main'
 
 export default defineConfig({
-	branch,
+	branch: 'main',
 	clientId: 'a1cf3764-04f2-44c0-b515-abf3fa316b7e', // Get this from tina.io
 	token: 'eba208cda3dc897c470f384ad3e050ccee8b4d29', // Get this from tina.io
 
@@ -16,7 +16,7 @@ export default defineConfig({
 	media: {
 		tina: {
 			mediaRoot: '/src/assets/images',
-			publicFolder: '/public/admin'
+			publicFolder: 'public'
 		}
 	},
 	schema: {
