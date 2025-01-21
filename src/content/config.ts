@@ -1,22 +1,39 @@
-import { defineCollection, z } from 'astro:content'
-import { CATEGORIES } from '@/data/categories'
+import { SITE } from "@config";
+import { glob } from "astro/loaders";
+import { defineCollection, z } from "astro:content";
 
 const blog = defineCollection({
-	// Type-check frontmatter using a schema
-	schema: ({ image }) =>
-		z.object({
-			title: z.string().max(80),
-			description: z.string(),
-			// Transform string to Date object
-			pubDate: z
-				.string()
-				.or(z.date())
-				.transform((val) => new Date(val)),
-			heroImage: image(),
-			category: z.enum(CATEGORIES),
-			tags: z.array(z.string()),
-			draft: z.boolean().default(false)
-		})
-})
+  type: "content_layer",
+  loader: glob({ pattern: "**/*.md", base: "./src/content/blog" }),
+  schema: ({ image }) =>
+    z.object({
+      author: z.string().default(SITE.author),
+      pubDatetime: z.date(),
+      modDatetime: z.date().optional().nullable(),
+      title: z.string(),
+      category: z.string().optional(),
+      featured: z.boolean().optional(),
+      draft: z.boolean().optional(),
+      tags: z.array(z.string()).default(["others"]),
+      ogImage: image()
+        .refine(img => img.width >= 1200 && img.height >= 630, {
+          message: "OpenGraph image must be at least 1200 X 630 pixels!",
+        })
+        .or(z.string())
+        .optional(),
+      description: z.string(),
+      postImage: z.string().optional(),
+      postImageDesc: z.string().optional(),
+      canonicalURL: z.string().optional(),
+      editPost: z
+        .object({
+          disabled: z.boolean().optional(),
+          url: z.string().optional(),
+          text: z.string().optional(),
+          appendFilePath: z.boolean().optional(),
+        })
+        .optional(),
+    }),
+});
 
-export const collections = { blog }
+export const collections = { blog };

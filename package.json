@@ -1,73 +1,49 @@
 {
-	"name": "blog-template",
-	"type": "module",
-	"version": "1.1.0",
-	"packageManager": "pnpm@9.9.0+sha512.60c18acd138bff695d339be6ad13f7e936eea6745660d4cc4a776d5247c540d0edee1a563695c183a66eb917ef88f2b4feb1fc25f32a7adcadc7aaf3438e99c1",
-	"description": "A template for creating a blog with Astro",
-	"author": "danielcgilibert",
-	"license": "GPL-3.0-only",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/danielcgilibert/blog-template"
-	},
-	"keywords": [
-		"astro",
-		"astrojs",
-		"astro-template",
-		"astro-blog",
-		"astro-b"
-	],
-	"bugs": {
-		"url": "https://github.com/danielcgilibert/blog-template/issues"
-	},
-	"scripts": {
-		"dev": "npx tinacms dev -c \"astro dev\"",
-		"start": "astro dev",
-		"build": "astro build",
-		"sync": "astro sync",
-		"preview": "astro preview",
-		"postbuild": "pagefind --site dist",
-		"format:check": "prettier --plugin-search-dir=. --check .",
-		"format": "prettier --plugin-search-dir=. --write .",
-		"lint": "eslint .",
-		"pre-commit": "lint-staged",
-		"prepare": "husky install"
-	},
-	"dependencies": {
-		"@astrojs/rss": "4.0.1",
-		"astro": "4.0.8",
-		"astro-font": "^0.0.72"
-	},
-	"devDependencies": {
-		"@astrojs/mdx": "2.0.3",
-		"@astrojs/sitemap": "3.0.4",
-		"@astrojs/tailwind": "5.1.0",
-		"@pagefind/default-ui": "^1.0.4",
-		"@tailwindcss/typography": "0.5.10",
-		"@tinacms/cli": "^1.5.30",
-		"@typescript-eslint/parser": "^6.16.0",
-		"clsx": "2.0.0",
-		"eslint": "^8.56.0",
-		"eslint-plugin-astro": "^0.31.0",
-		"eslint-plugin-jsx-a11y": "^6.8.0",
-		"husky": "^8.0.3",
-		"lint-staged": "^15.2.0",
-		"mdast-util-to-string": "^4.0.0",
-		"motion": "^10.16.4",
-		"pagefind": "^1.0.3",
-		"prettier": "^3.0.3",
-		"prettier-config-standard": "^7.0.0",
-		"prettier-plugin-astro": "^0.12.0",
-		"reading-time": "^1.5.0",
-		"slugify": "^1.6.6",
-		"tailwind-merge": "2.0.0",
-		"tailwindcss": "3.3.5",
-		"tinacms": "^1.5.21",
-		"typescript": "^5.2.2"
-	},
-	"lint-staged": {
-		"*.{astro,js,jsx,ts,tsx,md,mdx,json}": [
-			"prettier --write --plugin-search-dir=."
-		]
-	}
+  "name": "astro-paper",
+  "version": "4.7.0",
+  "private": false,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "sync": "astro sync",
+    "astro": "astro",
+    "format:check": "prettier --check . --plugin=prettier-plugin-astro",
+    "format": "prettier --write . --plugin=prettier-plugin-astro",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/rss": "^4.0.9",
+    "@resvg/resvg-js": "^2.6.2",
+    "astro": "^4.16.10",
+    "fuse.js": "^7.0.0",
+    "lodash.kebabcase": "^4.1.1",
+    "remark-collapse": "^0.1.2",
+    "remark-toc": "^9.0.0",
+    "satori": "^0.11.0",
+    "tailwindcss": "^3.4.11",
+    "typescript": "^5.5.3"
+  },
+  "devDependencies": {
+    "@astrojs/react": "^3.6.2",
+    "@astrojs/sitemap": "^3.2.1",
+    "@astrojs/tailwind": "^5.1.2",
+    "@tailwindcss/typography": "^0.5.15",
+    "@types/github-slugger": "^1.3.0",
+    "@types/lodash.kebabcase": "^4.1.9",
+    "@types/react": "^18.3.6",
+    "@typescript-eslint/parser": "^8.5.0",
+    "astro-eslint-parser": "^1.0.3",
+    "eslint": "^9.10.0",
+    "eslint-plugin-astro": "^1.2.4",
+    "globals": "^15.9.0",
+    "prettier": "^3.3.3",
+    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.6.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript-eslint": "^8.5.0"
+  }
 }

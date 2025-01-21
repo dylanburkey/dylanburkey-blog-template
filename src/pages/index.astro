@@ -1,38 +1,189 @@
 ---
-import ListCategories from '@/components/ListCategories'
-import ListPosts from '@/components/ListPosts'
-import TitlePage from '@/components/TitlePage'
-import BaseLayout from '@/layouts/BaseLayout'
-import { getPosts } from '@/utils'
+import { getCollection } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import LinkButton from "@components/LinkButton.astro";
+import Hr from "@components/Hr.astro";
+import Card from "@components/Card";
+import Socials from "@components/Socials.astro";
+import getSortedPosts from "@utils/getSortedPosts";
+import { SITE, SOCIALS } from "@config";
 
-const MAX_POSTS = 5 // max number of posts to show on the home page
-const posts = await getPosts(MAX_POSTS)
+const posts = await getCollection("blog");
+
+const sortedPosts = getSortedPosts(posts);
+const featuredPosts = sortedPosts.filter(({ data }) => data.featured);
+const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
+
+const socialCount = SOCIALS.filter(social => social.active).length;
 ---
 
-<BaseLayout title='Home'>
-	<TitlePage title='Blog Title' />
-	<ListCategories />
+<Layout>
+  <Header />
+  <main id="main-content">
+    <section id="hero">
+      <h1>
+        <span class="text-skin-accent">Web3 Connect:</span> Your Guide to a Decentralized
+        World
+      </h1>
 
-	<div>
-		<h2 class='text-lg font-medium tracking-wide text-end'>Latest Posts</h2>
-		<ListPosts FirstBig={true} posts={posts} />
-	</div>
-</BaseLayout>
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="/rss.xml"
+        class="rss-link mb-4 pb-3"
+        aria-label="rss feed"
+        title="RSS Feed"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="rss-icon"
+          ><path
+            d="M19 20.001C19 11.729 12.271 5 4 5v2c7.168 0 13 5.832 13 13.001h2z"
+          ></path><path
+            d="M12 20.001h2C14 14.486 9.514 10 4 10v2c4.411 0 8 3.589 8 8.001z"
+          ></path><circle cx="6" cy="18" r="2"></circle>
+        </svg>
+        <span>Unchained: Exploring Web3 Frontiers </span>
+        <span class="sr-only">RSS Feed</span>
+      </a>
+      {
+        /* <div class="mx-3 pt-5">
+            <strong class="text-skin-accent">Why Should You Care About Web3?</strong>
+            <p>Web3 is more than just a buzzword; it represents a fundamental shift in how we interact with the internet. Built on principles of decentralization, transparency, and user empowerment, Web3 is poised to redefine our digital experiences. Whether you're a developer, marketer, or simply a curious learner, understanding Web3 is crucial for staying relevant in today's tech landscape.
+            </p>
+            <strong class="text-skin-accent"> What is Web3?</strong>
+            <p>Web3 refers to the next generation of the internet, where users have greater control over their data and online interactions. It leverages blockchain technology to create decentralized applications (dApps) that operate without the need for intermediaries. This shift opens up exciting possibilities for innovation, collaboration, and community-driven projects.</p>
+      </div> */
+      }
 
-<script>
-	import { animate } from 'motion'
-	const showAnimations = localStorage.getItem('animations') === 'true'
+      {
+        // only display if at least one social link is enabled
+        socialCount > 0 && (
+          <div class="social-wrapper">
+            <div class="social-links">Social Links:</div>
+            <Socials />
+          </div>
+        )
+      }
+    </section>
 
-	if (showAnimations) {
-		animate(
-			'.title',
-			{ y: [80, 0], opacity: [0, 1] },
-			{
-				duration: 2.5,
-				opacity: { duration: 3 },
+    <section class="mx-auto w-full max-w-3xl px-4 pb-4">
+      <h3>A bit about this site</h3>
+      <p class="mb-4">
+        This is a mini site built with Astro. I decided to use a .box domain as
+        a placeholder for my personal site. <a
+          href="https://my.box.com"
+          rel="noopener noreferrer"
+          target="_blank"
+          title="Box Domains">.box domains</a
+        > are on chain TLDs.
+      </p>
+      <p class="mb-4">
+        It seems like .box domains are not crawled by search engines, so I might
+        have to use a different domain in the future.
+      </p>
+      <p class="mb-4"><strong>Updates:</strong></p>
+      <ul class="list-disc list-inside">
+        <li>2024-12-11: Added a new post on decentralized social media.</li>
+        <li>2024-12-11: Added a Service Worker to improve performance.</li>
+        <li>
+          2024-12-11: Using pre-rendering, pre-fetching, eager-loading,
+          lazy-loading, and caching to improve performance.
+        </li>
+      </ul>
+    </section>
 
-				offset: [0, 0.55, 0.75]
-			}
-		)
-	}
-</script>
+    <Hr />
+
+    {
+      featuredPosts.length > 0 && (
+        <>
+          <section id="featured">
+            <h2>Featured</h2>
+            <ul>
+              {featuredPosts.map(({ data, slug }) => (
+                <Card
+                  href={`/posts/${slug}/`}
+                  frontmatter={data}
+                  secHeading={false}
+                />
+              ))}
+            </ul>
+          </section>
+          {recentPosts.length > 0 && <Hr />}
+        </>
+      )
+    }
+
+    {
+      recentPosts.length > 0 && (
+        <section id="recent-posts">
+          <h2>Recent Posts</h2>
+          <ul>
+            {recentPosts.map(
+              ({ data, slug }, index) =>
+                index < SITE.postPerIndex && (
+                  <Card
+                    href={`/posts/${slug}/`}
+                    frontmatter={data}
+                    secHeading={false}
+                  />
+                )
+            )}
+          </ul>
+        </section>
+      )
+    }
+
+    <div class="all-posts-btn-wrapper">
+      <LinkButton href="/posts/">
+        All Posts
+        <svg xmlns="http://www.w3.org/2000/svg"
+          ><path
+            d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"
+          ></path>
+        </svg>
+      </LinkButton>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* ===== Hero Section ===== */
+  #hero {
+    @apply pb-6 pt-8;
+  }
+  #hero h1 {
+    @apply my-4 inline-block text-3xl font-bold sm:my-8 sm:text-5xl;
+  }
+  #hero .rss-link {
+    @apply mb-6;
+  }
+  #hero .rss-icon {
+    @apply mb-2 h-6 w-6 scale-110 fill-skin-accent sm:mb-3 sm:scale-125;
+  }
+  #hero p {
+    @apply my-2;
+  }
+  .social-wrapper {
+    @apply mt-4 flex flex-col sm:flex-row sm:items-center;
+  }
+  .social-links {
+    @apply mb-1 mr-2 whitespace-nowrap sm:mb-0;
+  }
+
+  /* ===== Featured & Recent Posts Sections ===== */
+  #featured,
+  #recent-posts {
+    @apply pb-6 pt-12;
+  }
+  #featured h2,
+  #recent-posts h2 {
+    @apply text-2xl font-semibold tracking-wide;
+  }
+  .all-posts-btn-wrapper {
+    @apply my-8 text-center;
+  }
+</style>
